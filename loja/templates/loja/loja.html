@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load l10n %}
 
 {% block titulo %}
     Loja
@@ -13,8 +14,8 @@
         {% csrf_token %}
         <button type="submit">Aplicar filtro</button>
         <p>Preço</p>
-        <input type="number" name="precominimo" value="{{ minimo }}">
-        <input type="number" name="precomaximo" value="{{ maximo }}">
+        <input type="number" name="precominimo" value="{% localize off %} {{ minimo }} {% endlocalize %}">
+        <input type="number" name="precomaximo" value="{% localize off %} {{ maximo }} {% endlocalize %}">
 
         <p>Tamanho</p>
         {% for tamanho in tamanhos %}

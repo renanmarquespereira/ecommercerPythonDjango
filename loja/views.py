@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from .models import *
 import uuid
-from .utils import filtar_produtos, preco_min_max, ordenar_produtos
+from .utils import filtar_produtos, preco_min_max, ordenar_produtos, enviar_email
 from django.contrib.auth import authenticate, login, logout
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
@@ -22,7 +22,9 @@ def loja(request, filtro=None):
 
     if request.method == "POST":
         dados = request.POST.dict()
-        produtos = produtos.filter(preco__gte=dados['precominimo'], preco__lte=dados['precomaximo'])
+        if dados['precominimo'] and dados['precomaximo']:
+            produtos = produtos.filter(preco__gte=dados['precominimo'], preco__lte=dados['precomaximo'])
+
         if "tamanho" in dados:
             itens = ItemEstoque.objects.filter(produto__in=produtos, tamanho=dados["tamanho"])
             id_produtos = itens.values_list("produto", flat=True).distinct()
@@ -274,6 +276,8 @@ def finalizar_pagamento(request):
 
         pedido.save()
         pagamento.save()
+
+        enviar_email(pedido)
 
         if request.user.is_authenticated:
             return redirect('meus_pedidos')

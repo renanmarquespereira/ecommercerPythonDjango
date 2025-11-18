@@ -137,7 +137,15 @@ STATICFILES_DIRS = [BASE_DIR / 'static']
 
 LOGIN_URL = 'fazer_login'
 
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+#EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
+#Enviar email para usuario
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'renanmarques31@gmail.com'
+EMAIL_HOST_PASSWORD = 'huyugdlwemtdbhnz'
 
 CSRF_TRUSTED_ORIGINS = [
     "https://*.ngrok-free.dev",   # aceita qualquer subdomínio do ngrok
