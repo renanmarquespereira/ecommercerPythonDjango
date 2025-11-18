@@ -251,6 +251,7 @@ def finalizar_pedido(request, id_pedido):
 
             #Aqui foi utilizado essa funcao para mandar para o mercado livre nossa view em formato de url
             link = request.build_absolute_uri(reverse("finalizar_pagamento"))
+            link = link.replace("http://", "https://")
             link_pagamento, id_pagamento = criar_pagamento(itens_pedido, link)
             pagamento = Pagamento.objects.create(id_pagamento=id_pagamento, pedido=pedido)
             pagamento.save()
@@ -261,7 +262,7 @@ def finalizar_pedido(request, id_pedido):
 
 def finalizar_pagamento(request):
     dados = request.GET.dict()
-    status = dados.get("status")
+    status = dados.get("collection_status")
     id_pagamento = dados.get("preference_id")
 
     if status == "approved":

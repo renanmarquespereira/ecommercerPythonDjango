@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-5jdn6q$&f*@dvm_ww63q#=+60qsiemdh%!ndpss%+54rtyg&pl
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -138,3 +138,7 @@ STATICFILES_DIRS = [BASE_DIR / 'static']
 LOGIN_URL = 'fazer_login'
 
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://*.ngrok-free.dev",   # aceita qualquer subdomínio do ngrok
+]
