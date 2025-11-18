@@ -34,3 +34,4 @@ def criar_pagamento(itens_pedido, link):
 
 
 
+git push --set-upstream https://github.com/renanmarquespereira/ecommercerPythonDjango
