@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block titulo %}
+    Recuperar Senha
+{% endblock %}
+
+{% block body %}
+    <h3>Recuperar senha</h3>
+
+    <form method="POST" action="">
+    {% csrf_token %}
+    <input type="email" name="email" placeholder="Digite seu e-mail">
+    <button type="submit">Enviar Senha</button>
+</form>
+{% endblock %}

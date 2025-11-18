@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block titulo %}
+    Criar conta
+{% endblock %}
+
+{% block body %}
+    <h3>Criar Conta</h3>
+{% if erro %}
+<h3>{{ erro }}</h3>
+{% endif %}
+<form method="POST" action="{% url 'criar_conta' %}">
+    {% csrf_token %}
+    <input type="email" name="email" placeholder="Digite seu e-mail">
+    <input type="password" name="senha" placeholder="Digite uma senha">
+    <input type="password" name="confirmarSenha" placeholder="Confirmar senha">
+    <button type="submit">Cadastrar</button>
+</form>
+<a href="{% url 'fazer_login' %}">Fazer Login</a>
+{% endblock %}

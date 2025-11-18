@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block titulo %}
+    Pedido APROVADO
+{% endblock %}
+
+{% block body %}
+<h3>Seu pedido {{ pedido.id }} foi aprovado!</h3>
+<h4>Sera encaminhado um email com todos os dados</h4>
+
+<a href="{% url 'loja' %}">Voltar a loja</a><br>
+
+
+<div>
+    <p>Número Pedido: {{ pedido.id }}</p>
+    <p>Data pedido:{{ pedido.data_finalizacao }}</p>
+    <p>Total: R$ {{ pedido.preco_total }}</p>
+    <p>Enviado para: {{ pedido.endereco.rua }}, {{ pedido.endereco.numero }}, {{ pedido.endereco.cidade }} - {{ pedido.endereco.estado }}, CEP: {{ pedido.endereco.cep }}</p>
+
+    {% for item in pedido.itens %}
+    <div>
+    <img src="{{ item.item_estoque.produto.imagem.url }}" alt="" width="100" height="150">
+    <p>Modelo: {{ item.item_estoque.produto.nome }}</p>
+    <p>Tamanho: {{ item.item_estoque.tamanho }}</p>
+    <p>Cor: {{ item.item_estoque.cor.nome }}</p>
+    <p>Quantidade: {{ item.quantidade }}</p>
+    <p>Valor Unitário: R$ {{ item.item_estoque.produto.preco }}</p>
+    </div>
+    {% endfor %}
+
+</div>
+
+{% endblock %}

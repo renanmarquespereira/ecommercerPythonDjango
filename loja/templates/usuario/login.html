@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block titulo %}
+    Login
+{% endblock %}
+
+{% block body %}
+    <h3>Login</h3>
+
+{% if erro %}
+    <h3>Erro de credenciais</h3>
+{% endif %}
+
+<form method="POST" action="{% url 'fazer_login' %}">
+    {% csrf_token %}
+    <input type="email" name="email" placeholder="Digite seu e-mail">
+    <input type="password" name="senha" placeholder="Digite sua senha">
+    <button type="submit">Entrar</button>
+</form>
+<a href="{% url 'criar_conta' %}">criar conta</a>
+<a href="{% url 'password_reset' %}">recuperar senha</a>
+{% endblock %}

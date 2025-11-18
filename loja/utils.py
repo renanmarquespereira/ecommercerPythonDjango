@@ -1,0 +1,39 @@
+from django.db.models import Min, Max
+
+
+def filtar_produtos(produtos, filtro):
+    # filtra a pagina por categorias
+    if filtro:
+        if "-" in filtro:
+            categoria, tipo = filtro.split("-")
+            produtos = produtos.filter(categoria__slug=categoria, tipo__slug=tipo)
+        else:
+            produtos = produtos.filter(categoria__slug=filtro)
+
+    return produtos
+
+def preco_min_max(produtos):
+    minimo = 0
+    maximo = 0
+    if len(produtos) > 0:
+        minimo = round(list(produtos.aggregate(Min('preco')).values())[0], 2)
+        maximo = round(list(produtos.aggregate(Max('preco')).values())[0], 2)
+
+    return minimo, maximo
+
+def ordenar_produtos(produtos, ordem):
+    if ordem == "menor_preco":
+        return produtos.order_by("preco")
+    elif ordem == "maior_preco":
+        return produtos.order_by("-preco")
+    elif ordem == "mais_vendidos":
+        lista_produtos = []
+        for produto in produtos:
+            lista_produtos.append((produto.total_vendas_produtos(), produto))
+
+        lista_produtos = sorted(lista_produtos, key=lambda x: x[0], reverse=True)
+        produtos = [item[1] for item in lista_produtos]
+
+        return produtos
+    else:
+        return produtos

@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block titulo %}
+    Home Page
+{% endblock %}
+
+{% block body %}
+    <h3>Sou a homepage</h3>
+    {% for banner in banners %}
+        <a href="{% url 'loja' %}{{ banner.link_destino }}">
+            <img src="{{ banner.imagem.url }}" width="300" height="450">
+        </a>
+    {% endfor %}
+
+
+{% endblock %}

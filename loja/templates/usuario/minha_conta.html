@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block titulo %}
+    Minha Conta
+{% endblock %}
+
+{% block body %}
+<h3>Minha Conta</h3>
+
+<a href="{% url 'meus_pedidos' %}">Pedidos</a>
+
+<a href="{% url 'fazer_logout' %}">Sair</a>
+
+<h3>Meus Dados</h3>
+<form action="{% url 'minha_conta' %}" method="POST">
+    {% csrf_token %}
+    Nome: <p><input type="text" name="nome" {% if request.user.cliente.nome %} value="{{ request.user.cliente.nome }}"{% else %} placeholder="Digite um nome" {% endif %}></p>
+    Email: <p><input type="email" name="email" {% if request.user.cliente.email %} value="{{ request.user.cliente.email }}"{% else %} placeholder="Digite um email" {% endif %}></p>
+    Nome: <p><input type="number" name="telefone" {% if request.user.cliente.telefone %} value="{{ request.user.cliente.telefone }}"{% else %} placeholder="Digite um telefone" {% endif %}></p>
+    <button name="btnSalvarDados" type="submit">Salvar</button>
+</form>
+<hr>
+
+<h3>Minha Senha</h3>
+<form action="{% url 'minha_conta' %}" method="POST">
+    {% csrf_token %}
+    <input type="password" name="senhaAtual" placeholder="Digite a senha atual...">
+    <input type="password" name="senhaNova" placeholder="Digite a nova senha...">
+    <input type="password" name="senhaNovaRepitida" placeholder="Repita a nova senha...">
+    <button name="btnEditarSenha" type="submit">Editar Senha</button>
+</form>
+
+<h2>{{ erro }}</h2>
+
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block titulo %}
+    Adicionar Novo Endereço
+{% endblock %}
+
+{% block body %}
+<a href="{% url 'checkout' %}">Retornar</a>
+
+<h3>Adicionar novo endereço</h3>
+<form method="POST" action="{% url 'adicionar_endereco' %}">
+    {% csrf_token %}
+    <input type="text" name="rua" placeholder="Rua">
+    <input type="number" name="numero" placeholder="Nº">
+    <input type="text" name="complemento" placeholder="Complemento">
+    <input type="text" name="bairro" placeholder="Bairro">
+    <input type="number" name="cep" placeholder="Cep">
+    <input type="text" name="cidade" placeholder="Cidade">
+    <input type="text" name="estado" placeholder="Estado">
+
+    <button type="submit">Adicionar endereço</button>
+
+</form>
+{% endblock %}
