@@ -283,7 +283,6 @@ def finalizar_pagamento(request):
         redirect("checkout")
 
 
-
 def pedido_aprovado(request, id_pedido):
     pedido = Pedido.objects.get(id=id_pedido)
     context = {"pedido": pedido}
