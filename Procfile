@@ -1,2 +1,2 @@
-web: python manage.py migrate && gunicorn projetoHashEcommerce.wsgi:application
+web: python manage.py migrate && gunicorn ecommerce.wsgi:application
 
