@@ -69,7 +69,8 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'loja.novos_context.carrinho',
-                'loja.novos_context.categorias_tipos'
+                'loja.novos_context.categorias_tipos',
+                'loja.novos_context.faz_parte_equipe'
             ],
         },
     },

@@ -34,7 +34,7 @@ def categorias_tipos(request):
 def faz_parte_equipe(request):
     equipe = False
     if request.user.is_authenticated:
-        if request.user.groups.filter(name="Equipe").exists():
+        if request.user.groups.filter(name="equipe").exists():
             equipe = True
 
-        return {"equipe": equipe}
+    return {"equipe": equipe}

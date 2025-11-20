@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from .models import *
 import uuid
-from .utils import filtar_produtos, preco_min_max, ordenar_produtos, enviar_email
+from .utils import filtar_produtos, preco_min_max, ordenar_produtos, enviar_email, exportar_csv
 from django.contrib.auth import authenticate, login, logout
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
@@ -456,3 +456,32 @@ def fazer_logout(request):
     logout(request)
     return redirect('fazer_login')
 
+@login_required
+def gerenciar_loja(request):
+    if request.user.groups.filter(name="equipe").exists():
+        pedidos = Pedido.objects.filter(finalizado=True)
+
+        faturamento = sum(pedido.preco_total for pedido in pedidos)
+        qtn_pedidos = len(pedidos)
+        qtn_produtos = sum(pedido.quantidade_total_itens for pedido in pedidos)
+
+
+        context = {"faturamento": faturamento, "qtn_pedidos": qtn_pedidos, "qtn_produtos": qtn_produtos}
+        return render(request, 'interno/gerenciar_loja.html', context)
+    else:
+        return redirect('loja')
+
+
+@login_required
+def exportar_relatorios(request, tipo_relatorio):
+    if request.user.groups.filter(name="equipe").exists():
+        if tipo_relatorio == "pedidos":
+            dados = Pedido.objects.filter(finalizado=True)
+        elif tipo_relatorio == "clientes":
+            dados = Cliente.objects.all()
+        elif tipo_relatorio == "enderecos":
+            dados = Endereco.objects.all()
+
+        return exportar_csv(dados)
+    else:
+        return redirect("gerenciar_loja")
