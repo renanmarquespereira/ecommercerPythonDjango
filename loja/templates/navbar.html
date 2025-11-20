@@ -8,6 +8,11 @@
     {% else %}
         <a href="{% url 'fazer_login' %}">Login</a>
     {% endif %}
+
+    {% if equipe %}
+        <a href="{% url 'gerenciar_loja' %}">Gerênciar Loja</a>
+    {% endif %}
+
     <a href="{% url 'carrinho' %}">Carrinho</a>
     <img src="{% static 'imagens/carrinho.png' %}" width="30" height="30" alt="no image">
     {{ quantidade_produtos_carrinho }}
