@@ -34,6 +34,8 @@ class Produto(models.Model):
     ativo = models.BooleanField(default=True)
     categoria = models.ForeignKey(Categoria, null=True, blank=True, on_delete=models.SET_NULL)
     tipo = models.ForeignKey(Tipo, null=True, blank=True, on_delete=models.SET_NULL)
+    composicao = models.CharField(max_length=100, null=True, blank=True)
+    descricao = models.TextField(max_length=400, null=True, blank=True)
 
     def __str__(self):
         return self.nome
@@ -55,6 +57,8 @@ class ItemEstoque(models.Model):
     cor = models.ForeignKey(Cor, null=True, blank=True, on_delete=models.SET_NULL)
     tamanho = models.CharField(max_length=10, null=True, blank=True)
     quantidade = models.IntegerField(default=0)
+    codigo = models.CharField(max_length=100, null=True, blank=True)
+
 
     def __str__(self):
         return str(f"{self.produto.nome} - {self.cor.nome} - {self.quantidade} - {self.tamanho}")

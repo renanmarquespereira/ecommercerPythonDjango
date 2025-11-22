@@ -72,7 +72,9 @@ def ver_produto(request, id_produto, id_cor=None):
             tamanhos = {item.tamanho for item in itens_estoque}
             cor = Cor.objects.get(id=id_cor)
 
-    context = {"produto": produto, "itens_estoque": itens_estoque, "tem_estoque": tem_estoque, "cores": cores, "tamanhos":tamanhos, "cor": cor}
+    similares = Produto.objects.filter(categoria__id=produto.categoria.id, tipo__id=produto.tipo.id).exclude(id=produto.id)[:4]
+
+    context = {"produto": produto, "itens_estoque": itens_estoque, "tem_estoque": tem_estoque, "cores": cores, "tamanhos":tamanhos, "cor": cor, "similares": similares}
     return render(request,'loja/ver_produtos.html', context)
 
 def carrinho(request):
