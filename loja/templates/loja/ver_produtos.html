@@ -10,38 +10,202 @@
 
     {% if tem_estoque %}
 
-        {{ itens_estoque }}
+        <main class="principal principal--padding-b principal--gap">
+      <section class="s-produto">
+        <div class="s-produto__carrossel">
+          <div class="s-produto__carrossel-itens">
+            <div class="s-produto__carrossel-img">
+              <img
+                src="{{ produto.imagem.url }}"
+                alt="Imagem Carrossel 1"
+              />
+            </div>
+              <div class="s-produto__carrossel-img" style="overflow: hidden;">
+              <img
+                src="{{ produto.imagem.url }}"
+                alt="Imagem Carrossel 1"
+                style="transform: scaleX(1.6);"
+              />
+            </div>
+          </div>
 
-        <img src="{{ produto.imagem.url }}" width="300" height="450">
-        <p>{{ produto.nome }}</p>
-        <p>{{ produto.preco }}</p>
+          <div class="s-produto__carrossel-botoes">
+            <div
+              class="s-produto__carrossel-botao s-produto__carrossel-botao--selecionado"
+            ></div>
+            <div class="s-produto__carrossel-botao"></div>
+            <div class="s-produto__carrossel-botao"></div>
+            <div class="s-produto__carrossel-botao"></div>
+            <div class="s-produto__carrossel-botao"></div>
+          </div>
+        </div>
 
-        {% if cor %}
-            Cor Selecionada: {{ cor.nome }}
-        {% endif %}
+        <div class="s-produto__informacoes">
+          <div class="s-produto__breadcrumbs">
+            <span><a href="{% url 'loja' %}">Loja</a></span>
+            <span><a href="{% url 'loja' %}{{ produto.categoria.slug }}">{{ produto.categoria.nome }}</a></span>
+            <span><a href="{% url 'loja' %}{{ produto.categoria.slug }}-{{ produto.tipo.slug }}">{{ produto.tipo.nome }}</a></span>
+            <span>
+              <p>{{ produto.nome }}</p>
+            </span>
+          </div>
 
-        {% for cor in cores %}
-            <a href="{% url 'ver_produto' produto.id cor.id %}">
-                <i class="fa-solid fa-circle" style="color: {{ cor.codigo }};"></i>
-            </a>
-        {% endfor %}
+          <div class="s-produto__infos">
+            <h1 class="s-produto__titulo">{{ produto.nome }}</h1>
 
-        {% if tamanhos %}
-        <form action="{% url 'adicionar_carrinho' produto.id %}" method="POST">
-            {% csrf_token %}
-            {% for tamanho in tamanhos %}
-            <input type="radio" name="tamanho" value="{{ tamanho }}">
-            <label for="{{ tamanho }} ">{{ tamanho }} </label>
-            {% endfor %}
+            <p class="s-produto__preco">R$ {{ produto.preco }}</p>
 
-        {% endif %}
+            <div class="s-produto__cor">
+                {% if cor %}
+                    <p class="s-produto__cor-nome s-produto__cores-item--selecionado">Cor: <span>{{ cor.nome }}</span></p>
+                {% else %}
+                    <p class="s-produto__cor-nome s-produto__cores-item--selecionado">Cor: <span>Selecione a cor</span></p>
+                {% endif %}
 
-            <input type="hidden" name="cor" value="{{ cor.id }}">
-            <button type="submit">Adicionar ao carrinho</button>
-        </form>
+
+              <div class="s-produto__cores">
+                  {% for cor in cores %}
+                <a href="{% url 'ver_produto' produto.id cor.id %}">
+                    <div
+                      class="s-produto__cores-item"
+                      style="background-color: {{ cor.codigo }}"
+                    ></div>
+                </a>
+
+                    {% endfor %}
+
+              </div>
+            </div>
+
+            <div class="s-produto__tamanho">
+
+
+              <p class="s-produto__tamanho-nome">Tamanho: <span>GG</span></p>
+              <div class="s-produto__tamanhos">
+                <div
+                  class="s-produto__tamanhos-item s-produto__tamanhos-item--selecionado"
+                >
+                  PP
+                </div>
+                  {% for tamanho in tamanhos %}
+
+                <div class="s-produto__tamanhos-item"><input type="radio" name="tamanho" value="{{ tamanho }}"></div>
+                  {% endfor %}
+              </div>
+            </div>
+          </div>
+
+          <button class="s-produto__adicicionar">Adicionar à sacola</button>
+
+          <div class="s-produto__descricao">
+            <p class="s-produto__descricao-titulo">Descrição do produto</p>
+            <div class="s-produto__descricao-textos">
+              <p>
+                Básicos indispensáveis! A camiseta de algodão cropped é perfeita
+                para usar com calças e saias de cintura alta.
+              </p>
+              <p>
+                COMPOSIÇÃO <br />
+                96% Viscose 4% Elastano
+              </p>
+              <p>
+                CÓDIGO DO PRODUTO <br />
+                Ref: <span>0078397051</span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="similares">
+        <h2 class="similares__titulo">
+          Gostou desse produto? Veja itens similares
+        </h2>
+
+        <div class="similares__container">
+          <a
+            href="https://www.usereserva.com/camiseta-silk-folhagem0078068/p?skuId=499434"
+            class="produto"
+          >
+            <div class="produto__imagem">
+              <img
+                src="https://lojausereserva.vtexassets.com/arquivos/ids/8404940-2400-auto?v=638358284054500000&width=2400&height=auto&aspect=true"
+                alt="Imagem do Produto"
+              />
+            </div>
+            <div class="produto__textos">
+              <p class="produto__titulo">Camiseta Silk Folhagem</p>
+              <div class="produto__preco">
+                <p class="produto__avista">R$ 349<sup>,00</sup></p>
+                <p class="produto__parcelado">5x R$ 69<sup>,80</sup></p>
+              </div>
+            </div>
+          </a>
+
+          <a
+            href="https://www.usereserva.com/camiseta-silk-folhagem0078068/p?skuId=499434"
+            class="produto"
+          >
+            <div class="produto__imagem">
+              <img
+                src="https://lojausereserva.vtexassets.com/arquivos/ids/8404940-2400-auto?v=638358284054500000&width=2400&height=auto&aspect=true"
+                alt="Imagem do Produto"
+              />
+            </div>
+            <div class="produto__textos">
+              <p class="produto__titulo">Camiseta Silk Folhagem</p>
+              <div class="produto__preco">
+                <p class="produto__avista">R$ 349<sup>,00</sup></p>
+                <p class="produto__parcelado">5x R$ 69<sup>,80</sup></p>
+              </div>
+            </div>
+          </a>
+
+          <a
+            href="https://www.usereserva.com/camiseta-silk-folhagem0078068/p?skuId=499434"
+            class="produto"
+          >
+            <div class="produto__imagem">
+              <img
+                src="https://lojausereserva.vtexassets.com/arquivos/ids/8404940-2400-auto?v=638358284054500000&width=2400&height=auto&aspect=true"
+                alt="Imagem do Produto"
+              />
+            </div>
+            <div class="produto__textos">
+              <p class="produto__titulo">Camiseta Silk Folhagem</p>
+              <div class="produto__preco">
+                <p class="produto__avista">R$ 349<sup>,00</sup></p>
+                <p class="produto__parcelado">5x R$ 69<sup>,80</sup></p>
+              </div>
+            </div>
+          </a>
+
+          <a
+            href="https://www.usereserva.com/camiseta-silk-folhagem0078068/p?skuId=499434"
+            class="produto"
+          >
+            <div class="produto__imagem">
+              <img
+                src="https://lojausereserva.vtexassets.com/arquivos/ids/8404940-2400-auto?v=638358284054500000&width=2400&height=auto&aspect=true"
+                alt="Imagem do Produto"
+              />
+            </div>
+            <div class="produto__textos">
+              <p class="produto__titulo">Camiseta Silk Folhagem</p>
+              <div class="produto__preco">
+                <p class="produto__avista">R$ 349<sup>,00</sup></p>
+                <p class="produto__parcelado">5x R$ 69<sup>,80</sup></p>
+              </div>
+            </div>
+          </a>
+        </div>
+      </section>
+    </main>
 
     {% else %}
         <p>Produto sem estoque</p>
     {% endif %}
+
+
 
 {% endblock %}
