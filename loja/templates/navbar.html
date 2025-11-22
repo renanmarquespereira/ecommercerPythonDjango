@@ -1,34 +1,4 @@
-
-<nav>
-    {% load static %}
-    <a href="{% url 'homepage' %}">Reserva</a>
-    <a href="{% url 'loja' %}">Loja</a>
-    {% if request.user.is_authenticated %}
-        <a href="{% url 'minha_conta' %}">Minha Conta</a>
-    {% else %}
-        <a href="{% url 'fazer_login' %}">Login</a>
-    {% endif %}
-
-    {% if equipe %}
-        <a href="{% url 'gerenciar_loja' %}">Gerênciar Loja</a>
-    {% endif %}
-
-    <a href="{% url 'carrinho' %}">Carrinho</a>
-    <img src="{% static 'imagens/carrinho.png' %}" width="30" height="30" alt="no image">
-    {{ quantidade_produtos_carrinho }}
-    <div style="display: flex">
-        {% for categoria in categorias_nav %}
-        <div>
-            <a href="{% url 'loja'%}{{ categoria.slug }}">{{ categoria.nome }}</a>:<br>
-            {% for tipo in tipos_nav %}
-                <a href="{% url 'loja' %}{{ categoria.slug }}-{{ tipo.slug }}">{{ tipo.nome }}</a>
-            {% endfor %}
-        </div>
-        {% endfor %}
-
-
-    </div>
-</nav>
+{% load static %}
 
 <header class="cabecalho">
       <div class="cabecalho__menu">
@@ -74,8 +44,7 @@
                     <a
                       class="cabecalho__link cabecalho__link--tipo"
                       href="{% url 'loja' %}{{ categoria.slug }}-{{ tipo.slug }}"
-                      >{{ tipo.nome }}</a
-                    >
+                      >{{ tipo.nome }}</a>
                     </li>
                     {% endfor %}
                 </ul>
@@ -91,7 +60,11 @@
       <div class="cabecalho__icones">
         <div class="cabecalho__icone-login">
           <!-- Para trocar o ícone basta adicionar a classe 'cabecalho__link-icone--logado' na âncora abaixo -->
-          <a class="cabecalho__link-icone" href="javascript: void(0)">
+                {% if request.user.is_authenticated %}
+                    <a class="cabecalho__link-icone cabecalho__link-icone--logado" href="javascript: void(0)">
+                {% else %}
+                    <a class="cabecalho__link-icone" href="{% url 'fazer_login' %}">
+                {% endif %}
             <svg class="cabecalho__icone" xmlns="http://www.w3.org/2000/svg">
               <path
                 fill-rule="evenodd"
@@ -113,24 +86,17 @@
 
           <!-- Para exibir o menu do perfil, basta adicionar a classe 'cabecalho__informacoes-perfil--aberto' na div abaixo -->
           <div class="cabecalho__informacoes-perfil">
-            <p class="cabecalho__texto">Olá, <span>João</span>!</p>
-            <a
-              class="cabecalho__link cabecalho__link--perfil"
-              href="minha-conta.html"
-              >Minha Conta</a
-            >
-            <a
-              class="cabecalho__link cabecalho__link--perfil"
-              href="meus-pedidos.html"
-              >Meus Pedidos</a
-            >
-            <hr />
-            <a class="cabecalho__link cabecalho__link--perfil" href="">Sair</a>
+                <p class="cabecalho__texto">Olá, <span>{{ request.user.cliente.nome }}</span></p>
+                <a class="cabecalho__link cabecalho__link--perfil" href="{% url 'minha_conta' %}">Minha Conta</a>
+                <a class="cabecalho__link cabecalho__link--perfil" href="{% url 'meus_pedidos' %}">Meus Pedidos</a>
+                <a class="cabecalho__link cabecalho__link--perfil" href="{% url 'gerenciar_loja' %}">Gerenciar Loja</a>
+            <hr/>
+            <a class="cabecalho__link cabecalho__link--perfil" href="{% url 'fazer_logout' %}">Sair</a>
           </div>
         </div>
 
         <div class="cabecalho__icone-carrinho">
-          <a class="cabecalho__link-icone" href="carrinho.html">
+          <a class="cabecalho__link-icone" href="{% url 'carrinho' %}">
             <svg
               class="cabecalho__icone cabecalho__icone--menor"
               xmlns="http://www.w3.org/2000/svg"
@@ -145,7 +111,7 @@
               />
             </svg>
           </a>
-          <div class="cabecalho__itens cabecalho__itens--visivel">2</div>
+          <div class="cabecalho__itens cabecalho__itens--visivel">{{ quantidade_produtos_carrinho }}</div>
         </div>
       </div>
     </header>

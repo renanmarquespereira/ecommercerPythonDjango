@@ -5,7 +5,7 @@ function redirectToPage() {
     if (selectedOption) {
       window.location.href = selectedOption;
     }
-  }
+}
 
 // Scripts do Menu Lateral
 
