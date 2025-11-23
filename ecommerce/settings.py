@@ -60,10 +60,28 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 ROOT_URLCONF = 'ecommerce.urls'
 
+#TEMPLATES = [
+#    {
+ #       'BACKEND': 'django.template.backends.django.DjangoTemplates',
+  #      'DIRS': [],
+   #     'APP_DIRS': True,
+    #    'OPTIONS': {
+     #       'context_processors': [
+      #          'django.template.context_processors.debug',
+       #         'django.template.context_processors.request',
+        #        'django.contrib.auth.context_processors.auth',
+         #       'django.contrib.messages.context_processors.messages',
+          #      'loja.novos_context.carrinho',
+           #     'loja.novos_context.categorias_tipos',
+            #    'loja.novos_context.faz_parte_equipe'
+            #],
+        #},
+    #},
+#]
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],  # adiciona pasta global
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -71,9 +89,10 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                # seus context processors customizados
                 'loja.novos_context.carrinho',
                 'loja.novos_context.categorias_tipos',
-                'loja.novos_context.faz_parte_equipe'
+                'loja.novos_context.faz_parte_equipe',
             ],
         },
     },
