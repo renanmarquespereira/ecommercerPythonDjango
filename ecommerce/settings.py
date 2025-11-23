@@ -172,5 +172,7 @@ EMAIL_HOST_USER = 'renanmarques31@gmail.com'
 EMAIL_HOST_PASSWORD = 'huyugdlwemtdbhnz'
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://*.ngrok-free.dev",   # aceita qualquer subdomínio do ngrok
+    "https://*.ngrok-free.dev",
+    "https://ecommercerpythondjango-production.up.railway.app",
+    "https://*.railway.app",  # opcional, cobre todos subdomínios do Railway
 ]

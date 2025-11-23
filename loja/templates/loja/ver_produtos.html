@@ -49,7 +49,7 @@
           <p class="s-produto__preco">R$ {{ produto.preco }}</p>
         {% if tem_estoque %}
           <div class="s-produto__cor">
-            <p class="s-produto__cor-nome">Cor: <span>{{ cor_selecionada.nome }}</span></p>
+            <p class="s-produto__cor-nome">Cor: <span>{{ cor.nome }}</span></p>
             <div class="s-produto__cores">
                 {% for cor in cores %}
               <a
@@ -75,7 +75,7 @@
                         {% endfor %}
                     </div>
                 </div>
-                <input type="hidden" name="cor" value="{{ cor_selecionada.id }}">
+                <input type="hidden" name="cor" value="{{ cor.id }}">
                 <button type="submit" class="s-produto__adicicionar">Adicionar à sacola</button>
             </form>
             {% endif %}
