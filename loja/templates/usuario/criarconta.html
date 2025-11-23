@@ -5,16 +5,55 @@
 {% endblock %}
 
 {% block body %}
-    <h3>Criar Conta</h3>
-{% if erro %}
-<h3>{{ erro }}</h3>
+
+{% if messages %}
+  {% for message in messages %}
+    <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show" role="alert">
+      {{ message }}
+    </div>
+  {% endfor %}
 {% endif %}
-<form method="POST" action="{% url 'criar_conta' %}">
-    {% csrf_token %}
-    <input type="email" name="email" placeholder="Digite seu e-mail">
-    <input type="password" name="senha" placeholder="Digite uma senha">
-    <input type="password" name="confirmarSenha" placeholder="Confirmar senha">
-    <button type="submit">Cadastrar</button>
-</form>
-<a href="{% url 'fazer_login' %}">Fazer Login</a>
+
+<main class="principal">
+
+      <section class="conta">
+          <div class="conta__container d-flex justify-content-center">
+          <div class="checkout__titulos">
+            <p class="checkout__titulo">Criar Conta</p>
+          </div>
+
+          <form
+            class="conta__form"
+            action="{% url 'criar_conta' %}"
+            method="POST"
+          >
+              {% csrf_token %}
+
+            <div class="conta__item conta__item--email">
+              <label for="email">E-mail</label>
+              <input name="email" type="email" placeholder="Digite um e-mail" />
+            </div>
+
+            <div class="conta__item">
+              <label for="senha">Senha</label>
+              <input name="senha" type="password" placeholder="Digite uma senha" />
+            </div>
+
+              <div class="conta__item">
+              <label for="confirmarSenha">Confirmar Senha</label>
+              <input name="confirmarSenha" type="password" placeholder="Repita a senha" />
+            </div>
+
+            <button class="subtotal__botao" type="submit">
+              Cadastrar
+            </button>
+          </form>
+              <div class="d-flex justify-content-center gap-3 mt-3 w-100 fs-3">
+                  <a href="{% url 'fazer_login' %}">Fazer Login</a>
+              </div>
+
+
+        </div>
+      </section>
+    </main>
 {% endblock %}

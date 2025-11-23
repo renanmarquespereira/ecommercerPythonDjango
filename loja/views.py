@@ -9,6 +9,8 @@ from django.contrib.auth.decorators import login_required
 from datetime import datetime
 from .api_mercadopago import criar_pagamento
 from django.urls import reverse
+from django.contrib import messages
+
 
 def homepage(request):
     banners = Banner.objects.filter(ativo=True)
@@ -332,7 +334,7 @@ def adicionar_endereco(request):
 @login_required
 def minha_conta(request):
     cliente = request.user.cliente
-    erro = None
+    erro = False
 
     if request.method == "POST":
         dados = request.POST.dict()
@@ -345,7 +347,8 @@ def minha_conta(request):
             if email != request.user.email:
                 usuarios = User.objects.filter(email=email)
                 if len(usuarios) > 0:
-                    erro = "Email já existe, tente outro..."
+                    messages.error(request, "Email já existe, tente outro...")
+                    erro = True
 
             if not erro:
                 cliente = request.user.cliente
@@ -356,7 +359,7 @@ def minha_conta(request):
                 cliente.telefone = telefone
                 cliente.save()
                 request.user.save()
-                erro = "Dados alterados"
+                messages.success(request, "Dados alterados")
 
         elif "btnEditarSenha" in dados:
             senhaAtual = dados.get('senhaAtual')
@@ -368,52 +371,49 @@ def minha_conta(request):
                 if usuario:
                     usuario.set_password(senhaNova)
                     usuario.save()
-                    erro = "Senha Alterada"
+                    messages.success(request, "Senha Alterada")
                 else:
-                    erro = "Senha Atual Invalida"
+                    messages.error(request, "Senha Atual Invalida")
             else:
-                erro = "Senhas não conferem"
+                messages.error(request, "Senhas não conferem")
 
-    context = {"erro": erro}
-    return render(request,'usuario/minha_conta.html', context)
+    return render(request,'usuario/minha_conta.html')
 
 @login_required
 def meus_pedidos(request):
-    pedidos = Pedido.objects.filter(cliente=request.user.cliente, finalizado=True)
+    pedidos = Pedido.objects.filter(cliente=request.user.cliente, finalizado=False)
     context = {"pedidos": pedidos.order_by('-data_finalizacao')}
     return render(request,'usuario/meus_pedidos.html', context)
 
 def fazer_login(request):
-    erro = False
     if request.user.is_authenticated:
         return redirect('loja')
     else:
         if request.method == "POST":
             dados = request.POST.dict()
-            if "email" in dados  and "senha" in dados:
+            if "email" in dados and "senha" in dados:
                 usuario = authenticate(request, username=dados.get('email'), password=dados.get('senha'))
                 if usuario:
                     login(request, usuario)
                     return redirect('loja')
                 else:
-                    erro = True
+                    messages.error(request, "Erro ao efetuar o login, usuario ou senha incorretos")
             else:
-                erro = True
+                messages.error(request, "Preencha todos os campos")
 
-        context = {'erro': erro}
-        return render(request, 'usuario/login.html', context)
+
+        return render(request, 'usuario/login.html')
 
 
 
 
 def criar_conta(request):
-    erro = None
     if request.user.is_authenticated:
         return redirect('loja')
     else:
         if request.method == "POST":
             dados = request.POST.dict()
-            if "email" in dados and "senha" in dados and "confirmarSenha" in dados:
+            if "" != dados.get("email") and "" != dados.get("senha") and "" != dados.get("confirmarSenha"):
                 email = dados.get('email')
                 senha = dados.get('senha')
                 confirmacao_senha = dados.get('confirmarSenha')
@@ -421,12 +421,12 @@ def criar_conta(request):
                 try:
                     validate_email(email)
                 except ValidationError:
-                    erro = "Email invalido"
+                    messages.error(request, "Email invalido")
 
                 if senha == confirmacao_senha:
                     usuario, criado = User.objects.get_or_create(username=email, email=email)
                     if not criado:
-                        erro = "Usuario ja existe"
+                        messages.error(request, "Email já existe, tente outro...")
                     else:
                         usuario.set_password(senha)
                         usuario.save()
@@ -445,12 +445,11 @@ def criar_conta(request):
                         cliente.save()
                         return redirect('loja')
                 else:
-                    erro = "Senhas não conferem"
+                    messages.error(request, "Senhas não conferem")
             else:
-                erro = "Preenchar todos os campos"
+                messages.error(request, "Preencha todos os campos")
 
-        context = {'erro': erro}
-        return render(request, 'usuario/criarconta.html', context)
+        return render(request, 'usuario/criarconta.html')
 
 def recuperar_senha(request):
     return render(request, 'usuario/recuperar_senha.html')

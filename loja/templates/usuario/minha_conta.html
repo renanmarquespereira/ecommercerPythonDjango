@@ -5,31 +5,83 @@
 {% endblock %}
 
 {% block body %}
-<h3>Minha Conta</h3>
 
-<a href="{% url 'meus_pedidos' %}">Pedidos</a>
+{% if messages %}
+  {% for message in messages %}
+    <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show" role="alert">
+      {{ message }}
+    </div>
+  {% endfor %}
+{% endif %}
 
-<a href="{% url 'fazer_logout' %}">Sair</a>
 
-<h3>Meus Dados</h3>
-<form action="{% url 'minha_conta' %}" method="POST">
-    {% csrf_token %}
-    Nome: <p><input type="text" name="nome" {% if request.user.cliente.nome %} value="{{ request.user.cliente.nome }}"{% else %} placeholder="Digite um nome" {% endif %}></p>
-    Email: <p><input type="email" name="email" {% if request.user.cliente.email %} value="{{ request.user.cliente.email }}"{% else %} placeholder="Digite um email" {% endif %}></p>
-    Nome: <p><input type="number" name="telefone" {% if request.user.cliente.telefone %} value="{{ request.user.cliente.telefone }}"{% else %} placeholder="Digite um telefone" {% endif %}></p>
-    <button name="btnSalvarDados" type="submit">Salvar</button>
-</form>
-<hr>
+<main class="principal">
 
-<h3>Minha Senha</h3>
-<form action="{% url 'minha_conta' %}" method="POST">
-    {% csrf_token %}
-    <input type="password" name="senhaAtual" placeholder="Digite a senha atual...">
-    <input type="password" name="senhaNova" placeholder="Digite a nova senha...">
-    <input type="password" name="senhaNovaRepitida" placeholder="Repita a nova senha...">
-    <button name="btnEditarSenha" type="submit">Editar Senha</button>
-</form>
+      <section class="conta">
+          <div class="conta__container">
+          <div class="checkout__titulos">
+            <p class="checkout__titulo">Dados pessoais</p>
+          </div>
 
-<h2>{{ erro }}</h2>
+          <form
+            class="conta__form"
+            action="{% url 'minha_conta' %}"
+            method="POST"
+          >
+              {% csrf_token %}
 
+            <div class="conta__item">
+              <label for="nome">Nome</label>
+              <input name="nome" type="text" {% if request.user.cliente.nome %} value="{{ request.user.cliente.nome }}"{% else %} placeholder="Digite um nome" {% endif %}/>
+            </div>
+
+            <div class="conta__item conta__item--email">
+              <label for="email">E-mail</label>
+              <input name="email" type="email"  {% if request.user.cliente.email %} value="{{ request.user.cliente.email }}"{% else %} placeholder="Digite um email" {% endif %} />
+            </div>
+
+            <div class="conta__item">
+              <label for="telefone">Telefone</label>
+              <input name="telefone" type="number" {% if request.user.cliente.telefone %} value="{{ request.user.cliente.telefone }}"{% else %} placeholder="Digite um telefone" {% endif %}/>
+            </div>
+
+            <button class="subtotal__botao" type="submit" name="btnSalvarDados">
+              Salvar alterações
+            </button>
+          </form>
+        </div>
+
+            <div class="conta__container">
+          <div class="checkout__titulos">
+            <p class="checkout__titulo">Alterar Senha</p>
+          </div>
+
+          <form
+            class="conta__form"
+            action="{% url 'minha_conta' %}"
+            method="post"
+          >
+              {% csrf_token %}
+            <div class="conta__item">
+              <label for="senhaAtual">Senha Atual</label>
+              <input type="password" name="senhaAtual" placeholder="Digite a senha atual..." />
+            </div><br>
+
+            <div class="conta__item">
+              <label for="senhaNova">Nova Senha</label>
+              <input type="password" name="senhaNova" placeholder="Digite a nova senha..." />
+            </div>
+
+            <div class="conta__item">
+              <label for="senhaNovaRepitida">Repita nova senha</label>
+              <input type="password" name="senhaNovaRepitida" placeholder="Repita a nova senha..." />
+            </div>
+
+            <button name="btnEditarSenha" class="subtotal__botao" type="submit">
+              Alterar Senha
+            </button>
+          </form>
+        </div>
+      </section>
+    </main>
 {% endblock %}

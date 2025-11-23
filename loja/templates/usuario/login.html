@@ -5,18 +5,51 @@
 {% endblock %}
 
 {% block body %}
-    <h3>Login</h3>
 
-{% if erro %}
-    <h3>Erro de credenciais</h3>
+{% if messages %}
+  {% for message in messages %}
+    <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show" role="alert">
+      {{ message }}
+    </div>
+  {% endfor %}
 {% endif %}
 
-<form method="POST" action="{% url 'fazer_login' %}">
-    {% csrf_token %}
-    <input type="email" name="email" placeholder="Digite seu e-mail">
-    <input type="password" name="senha" placeholder="Digite sua senha">
-    <button type="submit">Entrar</button>
-</form>
-<a href="{% url 'criar_conta' %}">criar conta</a>
-<a href="{% url 'password_reset' %}">recuperar senha</a>
+<main class="principal">
+
+      <section class="conta">
+          <div class="conta__container d-flex justify-content-center">
+          <div class="checkout__titulos">
+            <p class="checkout__titulo">Fazer Login</p>
+          </div>
+
+          <form
+            class="conta__form"
+            action="{% url 'fazer_login' %}"
+            method="POST"
+          >
+              {% csrf_token %}
+
+            <div class="conta__item">
+              <label for="email">E-mail</label>
+              <input name="email" type="email" placeholder="Digite um e-mail" />
+            </div>
+
+            <div class="conta__item">
+              <label for="senha">Senha</label>
+              <input name="senha" type="password" placeholder="Digite sua senha" />
+            </div>
+
+            <button class="subtotal__botao" type="submit">
+              Login
+            </button>
+          </form>
+              <div class="d-flex justify-content-center gap-3 mt-3 w-100 fs-3">
+                  <a href="{% url 'criar_conta' %}">criar conta</a>
+                  <a href="{% url 'password_reset' %}">recuperar senha</a>
+              </div>
+
+
+        </div>
+      </section>
+    </main>
 {% endblock %}
