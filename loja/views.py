@@ -14,8 +14,6 @@ from django.contrib import messages
 
 def homepage(request):
     banners = Banner.objects.filter(ativo=True)
-    for banner in banners:
-        print(banner.imagem.url)
     context = {"banners": banners}
     return render(request,'homepage.html', context)
 
