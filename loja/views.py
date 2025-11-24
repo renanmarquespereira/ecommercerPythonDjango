@@ -121,7 +121,8 @@ def adicionar_carrinho(request, id_produto):
         id_cor = dados.get('cor')
 
         if not tamanho:
-            return redirect('loja')
+            messages.error(request,"Selecione um tamanho")
+            return redirect('ver_produto', id_produto=id_produto)
 
         if request.user.is_authenticated:
             cliente = request.user.cliente
@@ -381,9 +382,18 @@ def minha_conta(request):
 
 @login_required
 def meus_pedidos(request):
-    pedidos = Pedido.objects.filter(cliente=request.user.cliente, finalizado=False)
-    context = {"pedidos": pedidos.order_by('-data_finalizacao')}
+    pedidos = Pedido.objects.filter(cliente=request.user.cliente)
+    context = {"pedidos": pedidos.order_by('finalizado', '-data_finalizacao')}
     return render(request,'usuario/meus_pedidos.html', context)
+
+def cancelar_pedido(request, id_pedido):
+    try:
+        pedido = Pedido.objects.get(id=id_pedido)
+        pedido.delete()
+        return redirect('meus_pedidos')
+    except:
+        messages.error(request, "Erro ao cancelar pedido")
+
 
 def fazer_login(request):
     if request.user.is_authenticated:

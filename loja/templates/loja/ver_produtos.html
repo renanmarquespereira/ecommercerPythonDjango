@@ -3,6 +3,14 @@
 
 {% block body %}
 
+{% if messages %}
+  {% for message in messages %}
+    <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show" role="alert">
+      {{ message }}
+    </div>
+  {% endfor %}
+{% endif %}
+
 <main class="principal principal--padding-b principal--gap">
     <section class="s-produto">
       <div class="s-produto__carrossel">

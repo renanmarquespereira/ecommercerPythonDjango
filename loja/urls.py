@@ -24,6 +24,7 @@ urlpatterns = [
     path('adicionarendereco/', views.adicionar_endereco, name='adicionar_endereco'),
     path('finalizarpedido/<int:id_pedido>/', views.finalizar_pedido, name='finalizar_pedido'),
     path('finalizarpagamento/', views.finalizar_pagamento, name='finalizar_pagamento'),
+    path('cancelarpedido/<int:id_pedido>', views.cancelar_pedido, name='cancelar_pedido'),
     
     #Conta
     path('criarconta/', views.criar_conta, name='criar_conta'),

@@ -5,29 +5,72 @@
 {% endblock %}
 
 {% block body %}
-<h3>Pedidos</h3>
 
-<a href="{% url 'minha_conta' %}">Minha Conta</a><br>
-
-{% for pedido in pedidos %}
-<div>
-    <p>Número Pedido: {{ pedido.id }}</p>
-    <p>Data pedido:{{ pedido.data_finalizacao }}</p>
-    <p>Total: R$ {{ pedido.preco_total }}</p>
-    <p>Enviado para: {{ pedido.endereco.rua }}, {{ pedido.endereco.numero }}, {{ pedido.endereco.cidade }} - {{ pedido.endereco.estado }}, CEP: {{ pedido.endereco.cep }}</p>
-
-    {% for item in pedido.itens %}
-    <div>
-    <img src="{{ item.item_estoque.produto.imagem.url }}" alt="" width="100" height="150">
-    <p>Modelo: {{ item.item_estoque.produto.nome }}</p>
-    <p>Tamanho: {{ item.item_estoque.tamanho }}</p>
-    <p>Cor: {{ item.item_estoque.cor.nome }}</p>
-    <p>Quantidade: {{ item.quantidade }}</p>
-    <p>Valor Unitário: R$ {{ item.item_estoque.produto.preco }}</p>
+{% if messages %}
+  {% for message in messages %}
+    <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show" role="alert">
+      {{ message }}
     </div>
-    {% endfor %}
+  {% endfor %}
+{% endif %}
 
-</div>
-{% endfor %}
+<main class="principal">
+      <section class="conta">
+        <div class="conta__container">
+          <div class="checkout__titulos">
+            <p class="checkout__titulo">Meus pedidos</p>
+          </div>
+            {% for pedido in pedidos %}
+                <div class="pedido">
+            <div class="pedido__cabecalho">
+              <div>
+                <p><b>Data do pedido</b></p>
+                <p>{% if pedido.data_finalizacao %}{{ pedido.data_finalizacao }}{% endif %}</p>
+              </div>
+
+              <div>
+                <p><b>Total</b></p>
+                <p>R$ {{ pedido.preco_total }}</p>
+              </div>
+
+              <div>
+                <p><b>Número do pedido</b></p>
+                <p>{{ pedido.id }}</p>
+              </div>
+                <div>
+                <p><b>Status</b></p>
+                <p>{% if pedido.finalizado %} <span class="text-danger">Finalizado</span> {% else %}<span class="text-success">Em Aberto</span> {% endif %}</p>
+              </div>
+            </div>
+                    {% for item in pedido.itens %}
+                        <div class="pedido__corpo">
+                          <div class="tabela__imagem">
+                            <img
+                              src="{{ item.item_estoque.produto.imagem.url }}"
+                              alt="Imagem do Produto"
+                            />
+                          </div>
+                          <div class="tabela__produto-textos">
+                            <p><b> {{ item.item_estoque.produto.nome }}</b></p>
+                            <p><b>Tamanho:</b> {{ item.item_estoque.tamanho }}</p>
+                            <p><b>Cor:</b> {{ item.item_estoque.cor.nome }}</p>
+                          </div>
+                        </div>
+                    {% endfor %}
+
+
+                    {% if not pedido.finalizado %}
+                    <div class="d-flex justify-content-between p-4">
+                        {% include 'modals/modal_confirma_cancelamento_compa.html' %}
+                        <p><button type="button" class="btn btn-outline-danger w-100 btn-lg" data-bs-toggle="modal" data-bs-target="#confirmModal">Cancelar Compra</button></p>
+                        <a href="{% url 'checkout' %}" class="flex-fill ms-2"><button type="button" class="btn btn-success w-100 btn-lg">Finalizar Compra</button></a>
+                    </div>
+                    {% endif %}
+          </div>
+            {% endfor %}
+
+        </div>
+      </section>
+    </main>
 
 {% endblock %}
