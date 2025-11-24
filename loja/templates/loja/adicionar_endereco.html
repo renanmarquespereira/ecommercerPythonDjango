@@ -5,20 +5,74 @@
 {% endblock %}
 
 {% block body %}
-<a href="{% url 'checkout' %}">Retornar</a>
 
-<h3>Adicionar novo endereço</h3>
-<form method="POST" action="{% url 'adicionar_endereco' %}">
-    {% csrf_token %}
-    <input type="text" name="rua" placeholder="Rua">
-    <input type="number" name="numero" placeholder="Nº">
-    <input type="text" name="complemento" placeholder="Complemento">
-    <input type="text" name="bairro" placeholder="Bairro">
-    <input type="number" name="cep" placeholder="Cep">
-    <input type="text" name="cidade" placeholder="Cidade">
-    <input type="text" name="estado" placeholder="Estado">
+{% if messages %}
+  {% for message in messages %}
+    <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show" role="alert">
+      {{ message }}
+    </div>
+  {% endfor %}
+{% endif %}
 
-    <button type="submit">Adicionar endereço</button>
+<main class="principal">
 
-</form>
+      <section class="conta">
+          <div class="conta__container d-flex justify-content-center">
+          <div class="checkout__titulos">
+            <p class="checkout__titulo">Cadastrar Novo Endereço</p>
+          </div>
+
+          <form
+            class="conta__form"
+            action="{% url 'adicionar_endereco' %}"
+            method="POST"
+          >
+              {% csrf_token %}
+
+                <div class="conta__item">
+                  <label for="rua">Logradouro</label>
+                  <input type="text" name="rua" placeholder="Digite um endereço">
+                </div>
+
+                <div class="conta__item">
+                  <label for="numero">Numero</label>
+                  <input type="number" name="numero" placeholder="Numero">
+                </div>
+
+              <div class="conta__item">
+                  <label for="complemento">Complemento</label>
+                  <input type="text" name="complemento" placeholder="Complemento">
+              </div>
+
+              <div class="conta__item">
+                  <label for="bairro">Bairro</label>
+                  <input type="text" name="bairro" placeholder="Bairro">
+              </div>
+
+              <div class="conta__item">
+                  <label for="cep">Cep</label>
+                  <input type="number" name="cep" placeholder="Cep">
+              </div>
+
+              <div class="conta__item">
+                  <label for="cidade">Cidade</label>
+                  <input type="text" name="cidade" placeholder="Cidade">
+              </div>
+
+              <div class="conta__item">
+                  <label for="estado">UF</label>
+                  <input type="text" name="estado" placeholder="UF">
+              </div>
+
+            <button class="subtotal__botao" type="submit">
+              Cadastrar
+            </button>
+          </form>
+              <div class="d-flex justify-content-center gap-3 mt-3 w-100 fs-3">
+                  <a href="{% url 'checkout' %}">Retornar Checkout</a>
+              </div>
+
+        </div>
+      </section>
+    </main>
 {% endblock %}

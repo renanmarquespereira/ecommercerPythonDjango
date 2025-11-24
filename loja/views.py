@@ -199,6 +199,7 @@ def checkout(request):
         else:
             return redirect('loja')
 
+
     # Apenas busca o pedido, sem criar
     pedido = Pedido.objects.filter(cliente=cliente, finalizado=False).first()
     if pedido:
@@ -218,16 +219,18 @@ def checkout(request):
 def finalizar_pedido(request, id_pedido):
     if request.method == "POST":
         dados = request.POST.dict()
-        erro = None
+        erro = False
         total_compra = dados.get('total')
         total_compra = float(total_compra.replace(',', '.'))
         pedido = Pedido.objects.get(id=id_pedido)
 
         if total_compra != float(pedido.preco_total):
-            erro = "Valores não conferem"
+            messages.error(request,"Valores não conferem")
+            erro = True
 
         if not "endereco" in dados:
-            erro = "Informe um endereço"
+            messages.error(request, "Informe um endereço")
+            erro = True
         else:
             id_endereco = dados.get("endereco")
             endereco = Endereco.objects.get(id=id_endereco)
@@ -237,9 +240,10 @@ def finalizar_pedido(request, id_pedido):
             try:
                 validate_email(dados.get("email"))
             except ValidationError:
-                erro = "Informe um email"
+                messages.error(request, "Informe um email")
+                erro = True
 
-            if not erro:
+            if not messages:
                 clientes = Cliente.objects.filter(email=dados.get("email"))
                 if clientes:
                     pedido.cliente = clientes[0]
@@ -253,7 +257,7 @@ def finalizar_pedido(request, id_pedido):
 
         if erro:
             enderecos = Endereco.objects.filter(cliente=pedido.cliente)
-            context = {"erro": erro, "pedido": pedido, "enderecos": enderecos}
+            context = {"pedido": pedido, "enderecos": enderecos}
             return render(request,'loja/checkout.html', context)
         else:
             itens_pedido = ItensPedido.objects.filter(pedido=pedido)
@@ -314,19 +318,25 @@ def adicionar_endereco(request):
                 return redirect('loja')
 
         dados = request.POST.dict()
-        endereco = Endereco.objects.create(
-            cliente=cliente,
-            rua=dados.get('rua'),
-            numero=dados.get('numero'),
-            complemento=dados.get('complemento'),
-            cep=dados.get('cep'),
-            bairro=dados.get('bairro'),
-            cidade=dados.get('cidade'),
-            estado=dados.get('estado'),
-        )
 
-        endereco.save()
-        return redirect('checkout')
+        if dados.get("rua") and dados.get("numero") and dados.get("cep"):
+            endereco = Endereco.objects.create(
+                cliente=cliente,
+                rua=dados.get('rua'),
+                numero=dados.get('numero'),
+                complemento=dados.get('complemento'),
+                cep=dados.get('cep'),
+                bairro=dados.get('bairro'),
+                cidade=dados.get('cidade'),
+                estado=dados.get('estado'),
+            )
+
+            endereco.save()
+            return redirect('checkout')
+        else:
+            messages.error(request,"Informe ao menos, RUA, numero e CEP")
+            context = {}
+            return render(request, 'loja/adicionar_endereco.html', context)
 
     else:
         context = {}
